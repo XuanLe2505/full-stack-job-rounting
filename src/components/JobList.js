@@ -2,7 +2,7 @@ import { Box, Grid, Pagination } from "@mui/material";
 import React, { useState } from "react";
 import JobCard from "./JobCard";
 
-const limit = 5;
+const limit = 6;
 
 function JobList({ jobsInfo }) {
   const [page, setPage] = useState(1);
@@ -19,7 +19,7 @@ function JobList({ jobsInfo }) {
             .slice((page - 1) * limit, page * limit)
             .map((job) => <JobCard key={job.id} job={job} />)}
       </Grid>
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3, mb: 3 }}>
         <Pagination count={pageCount} page={page} onChange={handleChange} />
       </Box>
     </>

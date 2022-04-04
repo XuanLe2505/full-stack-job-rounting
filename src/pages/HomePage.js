@@ -1,8 +1,9 @@
-import { Container } from "@mui/material";
+import { Container, Alert } from "@mui/material";
 import React from "react";
 import JobList from "../components/JobList";
 import { useEffect, useState } from "react";
 import apiService from "../app/apiService";
+import LoadingScreen from "../components/LoadingScreen";
 
 function HomePage() {
   const [loading, setLoading] = useState(false);
@@ -28,8 +29,18 @@ function HomePage() {
 
   return (
     <>
-      <Container sx={{ mt: 3 }}>
-        <JobList jobsInfo={jobsInfo} error={error} loading={loading} />
+      <Container sx={{ mt: 5 }}>
+        {loading ? (
+          <LoadingScreen />
+        ) : (
+          <>
+            {error ? (
+              <Alert severity="error">{error}</Alert>
+            ) : (
+              <JobList jobsInfo={jobsInfo}/>
+            )}
+          </>
+        )}
       </Container>
     </>
   );

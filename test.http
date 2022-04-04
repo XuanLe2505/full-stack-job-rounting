@@ -1,5 +1,5 @@
-GET http://localhost:3000/companies
+GET http://localhost:8000/companies
 
 ###
 
-GET http://localhost:3000/jobs
+GET http://localhost:8000/jobs

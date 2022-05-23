@@ -36,8 +36,8 @@ const style = {
 };
 
 const defaultValues = {
-  username: "Xuan Le",
-  password: "leanhxuan051996",
+  username: "admin",
+  password: "admin",
 };
 
 export default function LoginModal() {
@@ -57,7 +57,8 @@ export default function LoginModal() {
   };
 
   const onSubmit = (data) => {
-    auth.login(data.username, () => {
+    let {username, password} = data;
+    auth.login({username, password}, () => {
       navigate(from, { replace: true });
     });
   };

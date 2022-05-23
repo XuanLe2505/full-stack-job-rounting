@@ -5,7 +5,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import AuthRequire from "./contexts/AuthRequire";
 import Layout from "./layouts/Layout";
 import HomePage from "./pages/HomePage";
-import JobModal from "./pages/JobModal";
+import CompanyModal from "./pages/CompanyModal";
 import LoginModal from "./pages/LoginModal";
 import NotFoundPage from "./pages/NotFoundPage";
 import IconButton from "@mui/material/IconButton";
@@ -81,7 +81,7 @@ function App() {
               <Route element={<Layout />}>
                 <Route index element={<HomePage />} />
                 <Route path="/login" element={<HomePage />} />
-                <Route path="/jobs/:id" element={<HomePage />} />
+                <Route path="/companies" element={<HomePage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
@@ -89,10 +89,10 @@ function App() {
               <Route>
                 <Route path="/login" element={<LoginModal />} />
                 <Route
-                  path="/jobs/:id"
+                  path="/companies/:id"
                   element={
                     <AuthRequire>
-                      <JobModal />
+                      <CompanyModal />
                     </AuthRequire>
                   }
                 />

@@ -1,4 +1,5 @@
 import { createContext, useReducer, useEffect } from "react";
+import apiService from "../app/apiService";
 
 const initialState = {
   isAuthenticated: false,
@@ -37,6 +38,17 @@ const reducer = (state, action) => {
   }
 };
 
+const setSession = (accessToken) => {
+  if (accessToken) {
+    window.localStorage.setItem("accessToken", accessToken);
+    apiService.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    apiService.defaults.headers.common.accessToken = `${accessToken}`;
+  } else {
+    window.localStorage.removeItem("accessToken");
+    delete apiService.defaults.headers.common.accessToken;
+  }
+};
+
 const AuthContext = createContext({ ...initialState });
 
 function AuthProvider({ children }) {
@@ -46,13 +58,17 @@ function AuthProvider({ children }) {
     const initialize = async () => {
       try {
         const username = window.localStorage.getItem("username");
+        const password = window.localStorage.getItem("password");
+        const accessToken = window.localStorage.getItem("accessToken");
 
-        if (username) {
+        if (accessToken && username && password) {
+          setSession(accessToken);
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated: true, user: { username } },
+            payload: { isAuthenticated: true, user: { username, password } },
           });
         } else {
+          setSession(null);
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated: false, user: null },
@@ -60,6 +76,7 @@ function AuthProvider({ children }) {
         }
       } catch (err) {
         console.error(err);
+        setSession(null);
         dispatch({
           type: INITIALIZE,
           payload: {
@@ -72,17 +89,21 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
-  const login = async (username, callback) => {
+  const login = async ({username, password}, callback) => {
     window.localStorage.setItem("username", username);
+    window.localStorage.setItem("password", password);
+    setSession(123)
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: { user: { username } },
+      payload: { user: { username, password } },
     });
     callback();
   };
 
   const logout = async (callback) => {
+    setSession(null);
     window.localStorage.removeItem("username");
+    window.localStorage.removeItem("password");
     dispatch({ type: LOGOUT });
     callback();
   };
